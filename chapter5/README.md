@@ -39,7 +39,7 @@ chapter5
 ## Google Colabで動かす
 `chapter5/colab`というフォルダに入っています。
 github上から、notebookを開くと、Colabへのリンクが表示されるので、それをクリックするとcolab上で実行することができます。（Colabではなく、ご自身のPCで実行も可能です。その際には、ご自身のPCで環境構築する必要があります。）
-まずは、`Association.ipynb`や`Word2vec.ipynb`などを見ていただくと、レコメンドアルゴリズムのイメージが掴みやすいです。
+まずは、`Association.ipynb`や`Item2vec.ipynb`などを見ていただくと、レコメンドアルゴリズムのイメージが掴みやすいです。
 
 ## ご自身のPCで環境構築
 ### データのダウンロード
