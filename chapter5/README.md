@@ -43,12 +43,12 @@ github上から、notebookを開くと、Colabへのリンクが表示される�
 
 ## ご自身のPCで環境構築
 ### データのダウンロード
-アルゴリズムの学習に使用するMovielensのデータを`https://files.grouplens.org/datasets/movielens/ml-10m.zip`から手動でダウンロードして、解凍したものを`chpter5/data`に格納してください。
+アルゴリズムの学習に使用するMovielensのデータを`https://files.grouplens.org/datasets/movielens/ml-10m.zip`から手動でダウンロードして、解凍したものを`chapter5/data`に格納してください。
 または、下記のコードでダウンロードして解凍ください。
 ```
 # MovieLensのデータセットをdataディレクトリにダウンロードして展開
-$ wget -nc --no-check-certificate https://files.grouplens.org/datasets/movielens/ml-10m.zip -P chpter5/data
-$ unzip -n chpter5/data/ml-10m.zip -d chpter5/data
+$ wget -nc --no-check-certificate https://files.grouplens.org/datasets/movielens/ml-10m.zip -P chapter5/data
+$ unzip -n chapter5/data/ml-10m.zip -d chapter5/data
 ```
 
 ### Poetryを利用した環境構築
