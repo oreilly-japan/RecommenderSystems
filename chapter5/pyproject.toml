@@ -1,0 +1,42 @@
+[tool.poetry]
+name = "RecommenderSystems"
+version = "0.1.0"
+description = "Code for Practical Introduction to Recommender Systems(O'Reilly Japan)"
+authors = ["Masahiro Kazama", "Kojiro Iizuka", "Yuya Matsumura"]
+
+[tool.poetry.dependencies]
+python = "^3.7.1,<3.8"
+numpy = "^1.19.5"
+pandas = "^1.2.0"
+sklearn = "^0.0"
+tqdm = "^4.55.2"
+jupyterlab = "^3.0.3"
+jedi = "0.17.2"
+matplotlib = "^3.4.1"
+scikit-surprise = "^1.1.1"
+gensim = "^4.0.1"
+implicit = "^0.4.4"
+wheel = "^0.36.2"
+ipywidgets = "^7.6.3"
+mlxtend = "^0.18.0"
+xlearn = "^0.40a1"
+
+[tool.poetry.dev-dependencies]
+mypy = "^0.902"
+black = "^21.6b0"
+flake8 = "^3.9.2"
+taskipy = "^1.8.1"
+pytest = "^6.2.4"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.taskipy.tasks]
+test = { cmd = "pytest chapter7", help = "runs all unit tests" }
+pr_test = "task lint"
+fmt = { cmd = "black -l 120 chapter5 chapter7", help = "format code" }
+lint = { cmd = "task lint_black && task lint_flake8 && task lint_mypy", help = "exec lint" }
+lint_flake8 = "flake8 chapter5 chapter7"
+lint_mypy = "mypy chapter5/src chapter7/src"
+lint_black = "black -l 120 --check chapter5 chapter7"
