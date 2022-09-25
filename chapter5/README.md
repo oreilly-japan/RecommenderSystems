@@ -124,3 +124,34 @@ dockerのプロセスは次のコマンドで停止できます。
 ```
 $ docker-compose stop
 ```
+
+### vnevを利用した環境構築とjupyter notebook起動の手順
+
+#### venvによるライブラリのインストール
+
+poetryを使わずpythonのvenvを利用し、実行に必要なライブラリをインストールします。  
+なお、下記についてはWindows環境上のPython3.7.8で動作を確認しています。Windows環境でも[pyenv-win https://github.com/pyenv-win/pyenv-win](https://github.com/pyenv-win/pyenv-win)をインストールすることでpyenvが利用できます。
+
+1. pythonの仮想環境を作成します。
+    ```
+    $ python -m venv venv37
+    ```
+1. 仮想環境venv37を有効化します。
+    ```
+    $ venv37\Script\activate
+    ```
+1. ライブラリをインストールします。
+    ```
+    (venv37) $ pip install -r requirements.txt
+    ```
+
+#### jupyter notebookの起動
+先に作成した仮想環境venv37上でjupyter notebookを起動します。
+```
+(venv37) $ jupyter notebook
+```
+
+jupyter labも利用可能です。
+```
+(venv37) $ jupyter lab
+```
