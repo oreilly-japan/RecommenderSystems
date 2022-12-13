@@ -10,14 +10,14 @@ np.random.seed(0)
 
 class BPRRecommender(BaseRecommender):
     def recommend(self, dataset: Dataset, **kwargs) -> RecommendResult:
-        # 因子数
+        # 인자 수
         factors = kwargs.get("factors", 10)
-        # 評価数の閾値
+        # 평갓값의 임곗값
         minimum_num_rating = kwargs.get("minimum_num_rating", 0)
-        # エポック数
+        # 에폭 스
         n_epochs = kwargs.get("n_epochs", 50)
 
-        # 行列分解用に行列を作成する
+        # 행력 분해용 행렬을 작성한다
         filtered_movielens_train = dataset.train.groupby("movie_id").filter(
             lambda x: len(x["movie_id"]) >= minimum_num_rating
         )
@@ -38,10 +38,10 @@ class BPRRecommender(BaseRecommender):
         # initialize a model
         model = implicit.bpr.BayesianPersonalizedRanking(factors=factors, iterations=n_epochs)
 
-        # 学習
+        # 학습
         model.fit(movielens_matrix)
 
-        # 推薦
+        # 추천
         recommendations = model.recommend_all(movielens_matrix.T)
         pred_user2items = defaultdict(list)
         for user_id, user_index in user_id2index.items():
@@ -49,7 +49,7 @@ class BPRRecommender(BaseRecommender):
             for movie_index in movie_indexes:
                 movie_id = unique_movie_ids[movie_index]
                 pred_user2items[user_id].append(movie_id)
-        # BPRでは評価値の予測は難しいため、rmseの評価は行わない。（便宜上、テストデータの予測値をそのまま返す）
+        # BPR에서는 평갓값을 예측하지 않으므로, rmse 평가는 수행하지 않는다(편의상, 테스트 데이터의 예측값을 그대로 반환).
         return RecommendResult(dataset.test.rating, pred_user2items)
 
 
