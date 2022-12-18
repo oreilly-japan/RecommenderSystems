@@ -10,23 +10,23 @@ np.random.seed(0)
 
 class FMRecommender(BaseRecommender):
     def recommend(self, dataset: Dataset, **kwargs) -> RecommendResult:
-        # 因子数
+        # 인자 수
         factors = kwargs.get("factors", 10)
-        # 評価数の閾値
+        # 평갓값의 임곗값
         minimum_num_rating = kwargs.get("minimum_num_rating", 200)
-        # エポック数
+        # 에폭 수
         n_epochs = kwargs.get("n_epochs", 50)
-        # 学習率
+        # 학습률
         lr = kwargs.get("lr", 0.01)
-        # 補助情報の利用
+        # 보충 정보 사용
         use_side_information = kwargs.get("use_side_information", False)
 
-        # 評価値がminimum_num_rating件以上ある映画に絞る
+        # 평갓값이 minimum_num_rating건 이상인 영화로 필터링한다
         filtered_movielens_train = dataset.train.groupby("movie_id").filter(
             lambda x: len(x["movie_id"]) >= minimum_num_rating
         )
 
-        # ユーザーが評価した映画
+        # 사용자가 평가한 영화
         user_evaluated_movies = (
             filtered_movielens_train.groupby("user_id").agg({"movie_id": list})["movie_id"].to_dict()
         )
@@ -70,7 +70,7 @@ class FMRecommender(BaseRecommender):
         y_pred = fm_model.predict(X_test)
         pred_matrix = y_pred.reshape(len(unique_user_ids), len(unique_movie_ids))
 
-        # 学習用に出てこないユーザーや映画の予測評価値は、平均評価値とする
+        # 학습용에 나오지 않은 사용자나 영화의 예측 평갓값은 평균 평간값으로 한다
         average_score = dataset.train.rating.mean()
         movie_rating_predict = dataset.test.copy()
         pred_results = []

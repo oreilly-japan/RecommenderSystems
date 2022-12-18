@@ -49,7 +49,7 @@ class BPRRecommender(BaseRecommender):
             for movie_index in movie_indexes:
                 movie_id = unique_movie_ids[movie_index]
                 pred_user2items[user_id].append(movie_id)
-        # BPR에서는 평갓값을 예측하지 않으므로, rmse 평가는 수행하지 않는다(편의상, 테스트 데이터의 예측값을 그대로 반환).
+        # BPR에서는 평갓값을 예측하기 어려우므로 rmse 평가는 수행하지 않는다(편의상, 테스트 데이터의 예측값을 그대로 반환한다).
         return RecommendResult(dataset.test.rating, pred_user2items)
 
 
