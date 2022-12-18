@@ -9,24 +9,24 @@ np.random.seed(0)
 
 class Item2vecRecommender(BaseRecommender):
     def recommend(self, dataset: Dataset, **kwargs) -> RecommendResult:
-        # 因子数
+        # 인자 수
         factors = kwargs.get("factors", 100)
-        # エポック数
+        # 에폭 수
         n_epochs = kwargs.get("n_epochs", 30)
-        # windowサイズ
+        # window 크기
         window = kwargs.get("window", 100)
-        # スキップグラム
+        # 스킵 그램
         use_skip_gram = kwargs.get("use_skip_gram", 1)
-        # 階層的ソフトマックス
+        # 계층적 소프트맥스
         use_hierarchial_softmax = kwargs.get("use_hierarchial_softmax", 0)
-        # 使用する単語の出現回数のしきい値
+        # 사용할 단어의 출현 횟수의 임곗값
         min_count = kwargs.get("min_count", 5)
 
         item2vec_data = []
         movielens_train_high_rating = dataset.train[dataset.train.rating >= 4]
         for user_id, data in movielens_train_high_rating.groupby("user_id"):
-            # 評価された順に並び替える
-            # item2vecではwindowというパラメータがあり、itemの評価された順番も重要な要素となる
+            # 평가된 순으로 나열한다
+            # item2vec에서는 window라는 파라미터가 있으며, item의 평가된 순서도 중요한 요소가 된다
             item2vec_data.append(data.sort_values("timestamp")["movie_id"].tolist())
 
         model = gensim.models.word2vec.Word2Vec(
@@ -46,13 +46,13 @@ class Item2vecRecommender(BaseRecommender):
                 if item_id in model.wv.key_to_index:
                     input_data.append(item_id)
             if len(input_data) == 0:
-                # おすすめ計算できない場合は空配列
+                # 추천 계싼할 수 없는 경우에는 빈 배열
                 pred_user2items[user_id] = []
                 continue
             recommended_items = model.wv.most_similar(input_data, topn=10)
             pred_user2items[user_id] = [d[0] for d in recommended_items]
 
-        # Word2vecでは評価値の予測は難しいため、rmseの評価は行わない。（便宜上、テストデータの予測値をそのまま返す）
+        # Word2vec에서는 평갓값 예측이 어려우므로, rmse는 평가하지 않는다(편의상, 테스트 데이터의 예측값을 그대로 반환한다).
         return RecommendResult(dataset.test.rating, pred_user2items)
 
 

@@ -12,19 +12,19 @@ np.random.seed(0)
 
 class LDAContentRecommender(BaseRecommender):
     def recommend(self, dataset: Dataset, **kwargs) -> RecommendResult:
-        # 因子数
+        # 인자 수
         factors = kwargs.get("factors", 50)
-        # エポック数
+        # 에폭 수
         n_epochs = kwargs.get("n_epochs", 30)
 
         movie_content = dataset.item_content.copy()
-        # tagが付与されていない映画もあるが、genreはすべての映画に付与されている
-        # tagとgenreを結合したものを映画のコンテンツ情報として似ている映画を探して推薦していく
-        # tagがない映画に関しては、NaNになっているので、空のリストに変換してから処理をする
+        # tag가 부여되저 있지 않은 영화는 있지만, genre는 모든 영화에 부여되어 있다
+        # tag와 genre를 결함한 것을 영화의 콘텐츠로 해서 비슷한 영화를 차아서 추천한다
+        # tag가 없는 영화는 NaN으로 되어 있으므로, 빈 리스트로 변환해서 처리한다
         movie_content["tag_genre"] = movie_content["tag"].fillna("").apply(list) + movie_content["genre"].apply(list)
         movie_content["tag_genre"] = movie_content["tag_genre"].apply(lambda x: list(map(str, x)))
 
-        # タグとジャンルデータを使って、word2vecを学習する
+        # 태그와 장르 데이터를 사용해 word2vec을 학습한다
         tag_genre_data = movie_content.tag_genre.tolist()
 
         logging.basicConfig(format="%(asctime)s : %(levelname)s : %(message)s", level=logging.INFO)
@@ -70,7 +70,7 @@ class LDAContentRecommender(BaseRecommender):
                 if len(pred_user2items[user_id]) == 10:
                     break
 
-        # LDAでは評価値の予測は難しいため、rmseの評価は行わない。（便宜上、テストデータの予測値をそのまま返す）
+        # LDA에서는 평갓값의 예측이 어려우므로 rmse의 평가는 수행하지 않는다(편의상, 테스트 데이터의 예측값을 그대로 반환한다).
         return RecommendResult(dataset.test.rating, pred_user2items)
 
 
