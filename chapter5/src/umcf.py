@@ -10,7 +10,7 @@ np.random.seed(0)
 
 
 class UMCFRecommender(BaseRecommender):
-    def recommend(self, dataset: Dataset, **kwargs) -> RecommendResult:
+    def recommend(self, dataset: Dataset, topk,**kwargs) -> RecommendResult:
 
         # ピアソンの相関係数
         def peason_coefficient(u: np.ndarray, v: np.ndarray) -> float:
@@ -129,7 +129,7 @@ class UMCFRecommender(BaseRecommender):
 
                 return top_n
 
-            pred_user2items = get_top_n(predictions, n=10)
+            pred_user2items = get_top_n(predictions, n=topk)
 
             average_score = dataset.train.rating.mean()
             pred_results = []

@@ -9,7 +9,7 @@ np.random.seed(0)
 
 
 class IMFRecommender(BaseRecommender):
-    def recommend(self, dataset: Dataset, **kwargs) -> RecommendResult:
+    def recommend(self, dataset: Dataset, topk,**kwargs) -> RecommendResult:
         # 因子数
         factors = kwargs.get("factors", 10)
         # 評価数の閾値
@@ -35,24 +35,28 @@ class IMFRecommender(BaseRecommender):
         for i, row in movielens_train_high_rating.iterrows():
             user_index = user_id2index[row["user_id"]]
             movie_index = movie_id2index[row["movie_id"]]
-            movielens_matrix[movie_index, user_index] = 1.0 * alpha
+            movielens_matrix[movie_index, user_index] = 1.0 #* alpha
 
         # モデルの初期化
         model = implicit.als.AlternatingLeastSquares(
-            factors=factors, iterations=n_epochs, calculate_training_loss=True, random_state=1
+            factors=factors, alpha=alpha,iterations=n_epochs, calculate_training_loss=True, random_state=1
         )
 
         # 学習
-        model.fit(movielens_matrix)
+        model.fit(movielens_matrix.T.tocsr())
 
         # 推薦
-        recommendations = model.recommend_all(movielens_matrix.T)
+        recommendations = model.recommend_all(movielens_matrix.T.tocsr())
         pred_user2items = defaultdict(list)
+        # user_evaluated_movies = dataset.train.groupby("user_id").agg({"movie_id": list})["movie_id"].to_dict()
         for user_id, user_index in user_id2index.items():
             movie_indexes = recommendations[user_index, :]
             for movie_index in movie_indexes:
                 movie_id = unique_movie_ids[movie_index]
                 pred_user2items[user_id].append(movie_id)
+            # temp = [d for d in pred_user2items[user_id] if not d in user_evaluated_movies[user_id]]
+            temp = [d for d in pred_user2items[user_id]]
+            pred_user2items[user_id] = temp
         # IMFでは評価値の予測は難しいため、rmseの評価は行わない。（便宜上、テストデータの予測値をそのまま返す）
         return RecommendResult(dataset.test.rating, pred_user2items)
 

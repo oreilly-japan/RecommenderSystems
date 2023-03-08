@@ -8,7 +8,7 @@ np.random.seed(0)
 
 
 class NMFRecommender(BaseRecommender):
-    def recommend(self, dataset: Dataset, **kwargs) -> RecommendResult:
+    def recommend(self, dataset: Dataset, topk,**kwargs) -> RecommendResult:
         # 欠損値の穴埋め方法
         fillna_with_zero = kwargs.get("fillna_with_zero", True)
         factors = kwargs.get("factors", 5)
@@ -57,7 +57,7 @@ class NMFRecommender(BaseRecommender):
                 movie_id = user_movie_matrix.columns[movie_index]
                 if movie_id not in user_evaluated_movies[user_id]:
                     pred_user2items[user_id].append(movie_id)
-                if len(pred_user2items[user_id]) == 10:
+                if len(pred_user2items[user_id]) == topk:
                     break
 
         return RecommendResult(movie_rating_predict.rating_pred, pred_user2items)

@@ -8,7 +8,7 @@ np.random.seed(0)
 
 
 class Item2vecRecommender(BaseRecommender):
-    def recommend(self, dataset: Dataset, **kwargs) -> RecommendResult:
+    def recommend(self, dataset: Dataset, topk,**kwargs) -> RecommendResult:
         # 因子数
         factors = kwargs.get("factors", 100)
         # エポック数
@@ -40,6 +40,7 @@ class Item2vecRecommender(BaseRecommender):
         )
 
         pred_user2items = dict()
+        # user_evaluated_movies = dataset.train.groupby("user_id").agg({"movie_id": list})["movie_id"].to_dict()
         for user_id, data in movielens_train_high_rating.groupby("user_id"):
             input_data = []
             for item_id in data.sort_values("timestamp")["movie_id"].tolist():
@@ -49,8 +50,10 @@ class Item2vecRecommender(BaseRecommender):
                 # おすすめ計算できない場合は空配列
                 pred_user2items[user_id] = []
                 continue
-            recommended_items = model.wv.most_similar(input_data, topn=10)
+            recommended_items = model.wv.most_similar(input_data, topn=topk)
             pred_user2items[user_id] = [d[0] for d in recommended_items]
+            # temp = [d[0] for d in recommended_items if not d[0] in user_evaluated_movies[user_id]]
+            # pred_user2items[user_id] = temp
 
         # Word2vecでは評価値の予測は難しいため、rmseの評価は行わない。（便宜上、テストデータの予測値をそのまま返す）
         return RecommendResult(dataset.test.rating, pred_user2items)

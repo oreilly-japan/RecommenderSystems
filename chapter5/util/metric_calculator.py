@@ -41,7 +41,10 @@ class MetricCalculator:
         scores = []
         # テストデータに存在する各ユーザーのrecall@kを計算
         for user_id in true_user2items.keys():
-            r_at_k = self._recall_at_k(true_user2items[user_id], pred_user2items[user_id], k)
+            if user_id in pred_user2items.keys():
+                r_at_k = self._recall_at_k(true_user2items[user_id], pred_user2items[user_id], k)
+            else:
+                r_at_k = 0
             scores.append(r_at_k)
         return np.mean(scores)
 
@@ -51,6 +54,9 @@ class MetricCalculator:
         scores = []
         # テストデータに存在する各ユーザーのprecision@kを計算
         for user_id in true_user2items.keys():
-            p_at_k = self._precision_at_k(true_user2items[user_id], pred_user2items[user_id], k)
+            if user_id in pred_user2items.keys():
+                p_at_k = self._precision_at_k(true_user2items[user_id], pred_user2items[user_id], k)
+            else:
+                p_at_k = 0
             scores.append(p_at_k)
         return np.mean(scores)

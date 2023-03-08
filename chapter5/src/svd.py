@@ -8,7 +8,7 @@ np.random.seed(0)
 
 
 class SVDRecommender(BaseRecommender):
-    def recommend(self, dataset: Dataset, **kwargs) -> RecommendResult:
+    def recommend(self, dataset: Dataset, topk,**kwargs) -> RecommendResult:
         # 欠損値の穴埋め方法
         fillna_with_zero = kwargs.get("fillna_with_zero", True)
         factors = kwargs.get("factors", 5)
@@ -45,7 +45,7 @@ class SVDRecommender(BaseRecommender):
 
         # 各ユーザに対するおすすめ映画は、そのユーザがまだ評価していない映画の中から予測値が高い順にする
         pred_user2items = defaultdict(list)
-        user_evaluated_movies = dataset.train.groupby("user_id").agg({"movie_id": list})["movie_id"].to_dict()
+        # user_evaluated_movies = dataset.train.groupby("user_id").agg({"movie_id": list})["movie_id"].to_dict()
         for user_id in dataset.train.user_id.unique():
             if user_id not in user_id2index:
                 continue
@@ -53,9 +53,10 @@ class SVDRecommender(BaseRecommender):
             movie_indexes = np.argsort(-pred_matrix[user_index, :])
             for movie_index in movie_indexes:
                 movie_id = user_movie_matrix.columns[movie_index]
-                if movie_id not in user_evaluated_movies[user_id]:
-                    pred_user2items[user_id].append(movie_id)
-                if len(pred_user2items[user_id]) == 10:
+                pred_user2items[user_id].append(movie_id)
+                # if movie_id not in user_evaluated_movies[user_id]:
+                #     pred_user2items[user_id].append(movie_id)
+                if len(pred_user2items[user_id]) == topk:
                     break
 
         return RecommendResult(movie_rating_predict.rating_pred, pred_user2items)

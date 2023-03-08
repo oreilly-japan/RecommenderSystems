@@ -9,7 +9,7 @@ np.random.seed(0)
 
 
 class RFRecommender(BaseRecommender):
-    def recommend(self, dataset: Dataset, **kwargs) -> RecommendResult:
+    def recommend(self, dataset: Dataset, topk,**kwargs) -> RecommendResult:
         # 評価値をユーザー×映画の行列に変換。欠損値は、平均値または０で穴埋めする
         user_movie_matrix = dataset.train.pivot(index="user_id", columns="movie_id", values="rating")
         user_id2index = dict(zip(user_movie_matrix.index, range(len(user_movie_matrix.index))))
@@ -76,19 +76,22 @@ class RFRecommender(BaseRecommender):
 
         pred_train_all = train_all_keys.copy()
         pred_train_all["rating_pred"] = train_all_pred
+        print(pred_train_all.shape)
         pred_matrix = pred_train_all.pivot(index="user_id", columns="movie_id", values="rating_pred")
+        print(pred_matrix.shape)
 
         # ユーザーが学習用データ内で評価していない映画の中から
         # 予測評価値が高い順に10件の映画をランキング形式の推薦リストとする
         pred_user2items = defaultdict(list)
-        user_evaluated_movies = dataset.train.groupby("user_id").agg({"movie_id": list})["movie_id"].to_dict()
+        # user_evaluated_movies = dataset.train.groupby("user_id").agg({"movie_id": list})["movie_id"].to_dict()
         for user_id in dataset.train.user_id.unique():
             movie_indexes = np.argsort(-pred_matrix.loc[user_id, :]).values
             for movie_index in movie_indexes:
                 movie_id = user_movie_matrix.columns[movie_index]
-                if movie_id not in (user_evaluated_movies[user_id]):
-                    pred_user2items[user_id].append(movie_id)
-                if len(pred_user2items[user_id]) == 10:
+                pred_user2items[user_id].append(movie_id)
+                # if movie_id not in (user_evaluated_movies[user_id]):
+                #     pred_user2items[user_id].append(movie_id)
+                if len(pred_user2items[user_id]) == topk:
                     break
 
         return RecommendResult(movie_rating_predict.rating_pred, pred_user2items)

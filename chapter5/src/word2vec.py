@@ -8,7 +8,7 @@ np.random.seed(0)
 
 
 class Word2vecRecommender(BaseRecommender):
-    def recommend(self, dataset: Dataset, **kwargs) -> RecommendResult:
+    def recommend(self, dataset: Dataset, topk,**kwargs) -> RecommendResult:
         # 因子数
         factors = kwargs.get("factors", 100)
         # エポック数
@@ -73,8 +73,9 @@ class Word2vecRecommender(BaseRecommender):
             similar_indexes = np.argsort(-score_vec)
             similar_items = []
             for similar_index in similar_indexes:
-                if ids[similar_index] not in evaluated_movie_ids:
-                    similar_items.append(ids[similar_index])
+                similar_items.append(ids[similar_index])
+                # if ids[similar_index] not in evaluated_movie_ids:
+                #     similar_items.append(ids[similar_index])
                 if len(similar_items) == topn:
                     break
             return similar_items
@@ -90,7 +91,7 @@ class Word2vecRecommender(BaseRecommender):
 
             movie_indexes = [id2index[id] for id in movie_ids]
             user_vector = movie_norm_vectors[movie_indexes].mean(axis=0)
-            recommended_items = find_similar_items(user_vector, evaluated_movie_ids, topn=10)
+            recommended_items = find_similar_items(user_vector, evaluated_movie_ids, topn=topk)
             pred_user2items[user_id] = recommended_items
 
         # Word2vecでは評価値の予測は難しいため、rmseの評価は行わない。（便宜上、テストデータの予測値をそのまま返す）

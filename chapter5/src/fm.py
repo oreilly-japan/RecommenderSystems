@@ -9,7 +9,7 @@ np.random.seed(0)
 
 
 class FMRecommender(BaseRecommender):
-    def recommend(self, dataset: Dataset, **kwargs) -> RecommendResult:
+    def recommend(self, dataset: Dataset, topk,**kwargs) -> RecommendResult:
         # 因子数
         factors = kwargs.get("factors", 10)
         # 評価数の閾値
@@ -94,7 +94,7 @@ class FMRecommender(BaseRecommender):
                 movie_id = unique_movie_ids[movie_index]
                 if movie_id not in user_evaluated_movies[user_id]:
                     pred_user2items[user_id].append(movie_id)
-                if len(pred_user2items[user_id]) == 10:
+                if len(pred_user2items[user_id]) == topk:
                     break
 
         return RecommendResult(movie_rating_predict.rating_pred, pred_user2items)

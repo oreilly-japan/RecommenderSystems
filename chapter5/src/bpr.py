@@ -9,7 +9,7 @@ np.random.seed(0)
 
 
 class BPRRecommender(BaseRecommender):
-    def recommend(self, dataset: Dataset, **kwargs) -> RecommendResult:
+    def recommend(self, dataset: Dataset, topk,**kwargs) -> RecommendResult:
         # 因子数
         factors = kwargs.get("factors", 10)
         # 評価数の閾値
@@ -39,10 +39,10 @@ class BPRRecommender(BaseRecommender):
         model = implicit.bpr.BayesianPersonalizedRanking(factors=factors, iterations=n_epochs)
 
         # 学習
-        model.fit(movielens_matrix)
+        model.fit(movielens_matrix.T.tocsr())
 
         # 推薦
-        recommendations = model.recommend_all(movielens_matrix.T)
+        recommendations = model.recommend_all(movielens_matrix.T.tocsr())
         pred_user2items = defaultdict(list)
         for user_id, user_index in user_id2index.items():
             movie_indexes = recommendations[user_index, :]

@@ -10,7 +10,7 @@ np.random.seed(0)
 
 
 class MFRecommender(BaseRecommender):
-    def recommend(self, dataset: Dataset, **kwargs) -> RecommendResult:
+    def recommend(self, dataset: Dataset, topk,**kwargs) -> RecommendResult:
         # 因子数
         factors = kwargs.get("factors", 5)
         # 評価数の閾値
@@ -54,7 +54,7 @@ class MFRecommender(BaseRecommender):
         # 学習データに出てこないユーザーとアイテムの組み合わせを準備
         data_test = data_train.build_anti_testset(None)
         predictions = matrix_factorization.test(data_test)
-        pred_user2items = get_top_n(predictions, n=10)
+        pred_user2items = get_top_n(predictions, n=topk)
 
         test_data = pd.DataFrame.from_dict(
             [{"user_id": p.uid, "movie_id": p.iid, "rating_pred": p.est} for p in predictions]

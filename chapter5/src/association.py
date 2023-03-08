@@ -9,7 +9,7 @@ np.random.seed(0)
 
 
 class AssociationRecommender(BaseRecommender):
-    def recommend(self, dataset: Dataset, **kwargs) -> RecommendResult:
+    def recommend(self, dataset: Dataset, topk,**kwargs) -> RecommendResult:
         # 評価数の閾値
         min_support = kwargs.get("min_support", 0.1)
         min_threshold = kwargs.get("min_threshold", 1)
@@ -29,7 +29,7 @@ class AssociationRecommender(BaseRecommender):
 
         # アソシエーションルールを使って、各ユーザーにまだ評価していない映画を１０本推薦する
         pred_user2items = defaultdict(list)
-        user_evaluated_movies = dataset.train.groupby("user_id").agg({"movie_id": list})["movie_id"].to_dict()
+        # user_evaluated_movies = dataset.train.groupby("user_id").agg({"movie_id": list})["movie_id"].to_dict()
 
         # 学習用データで評価値が4以上のものだけ取得する。
         movielens_train_high_rating = dataset.train[dataset.train.rating >= 4]
@@ -47,10 +47,11 @@ class AssociationRecommender(BaseRecommender):
             # 登場頻度をカウント
             counter = Counter(consequent_movies)
             for movie_id, movie_cnt in counter.most_common():
-                if movie_id not in user_evaluated_movies[user_id]:
-                    pred_user2items[user_id].append(movie_id)
+                pred_user2items[user_id].append(movie_id)
+                # if movie_id not in user_evaluated_movies[user_id]:
+                #     pred_user2items[user_id].append(movie_id)
                 # 推薦リストが10本になったら終了する
-                if len(pred_user2items[user_id]) == 10:
+                if len(pred_user2items[user_id]) == topk:
                     break
 
         # アソシエーションルールでは評価値の予測は難しいため、rmseの評価は行わない。（便宜上、テストデータの予測値をそのまま返す）

@@ -7,7 +7,7 @@ np.random.seed(0)
 
 
 class PopularityRecommender(BaseRecommender):
-    def recommend(self, dataset: Dataset, **kwargs) -> RecommendResult:
+    def recommend(self, dataset: Dataset, topk,**kwargs) -> RecommendResult:
         # 評価数の閾値
         minimum_num_rating = kwargs.get("minimum_num_rating", 200)
 
@@ -21,18 +21,19 @@ class PopularityRecommender(BaseRecommender):
         # 各ユーザに対するおすすめ映画は、そのユーザがまだ評価していない映画の中から評価値が高いもの10作品とする
         # ただし、評価件数が少ないとノイズが大きいため、minimum_num_rating件以上評価がある映画に絞る
         pred_user2items = defaultdict(list)
-        user_watched_movies = dataset.train.groupby("user_id").agg({"movie_id": list})["movie_id"].to_dict()
-        movie_stats = dataset.train.groupby("movie_id").agg({"rating": [np.size, np.mean]})
+        # user_watched_movies = dataset.train.groupby("user_id").agg({"movie_id": list})["movie_id"].to_dict()
+        movie_stats = dataset.train.groupby("movie_id").agg({"rating": [np.size, np.sum]})
         atleast_flg = movie_stats["rating"]["size"] >= minimum_num_rating
         movies_sorted_by_rating = (
-            movie_stats[atleast_flg].sort_values(by=("rating", "mean"), ascending=False).index.tolist()
+            movie_stats[atleast_flg].sort_values(by=("rating", "sum"), ascending=False).index.tolist()
         )
 
         for user_id in dataset.train.user_id.unique():
             for movie_id in movies_sorted_by_rating:
-                if movie_id not in user_watched_movies[user_id]:
-                    pred_user2items[user_id].append(movie_id)
-                if len(pred_user2items[user_id]) == 10:
+                pred_user2items[user_id].append(movie_id)
+                # if movie_id not in user_watched_movies[user_id]:
+                #     pred_user2items[user_id].append(movie_id)
+                if len(pred_user2items[user_id]) == topk:
                     break
 
         return RecommendResult(movie_rating_predict.rating_pred, pred_user2items)

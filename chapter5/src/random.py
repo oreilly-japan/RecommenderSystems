@@ -7,7 +7,7 @@ np.random.seed(0)
 
 
 class RandomRecommender(BaseRecommender):
-    def recommend(self, dataset: Dataset, **kwargs) -> RecommendResult:
+    def recommend(self, dataset: Dataset, topk,**kwargs) -> RecommendResult:
         # ユーザーIDとアイテムIDに対して、０始まりのインデックスを割り振る
         unique_user_ids = sorted(dataset.train.user_id.unique())
         unique_movie_ids = sorted(dataset.train.movie_id.unique())
@@ -38,15 +38,16 @@ class RandomRecommender(BaseRecommender):
         # キーはユーザーIDで、バリューはおすすめのアイテムIDのリスト
         pred_user2items = defaultdict(list)
         # ユーザーがすでに評価した映画を取得する
-        user_evaluated_movies = dataset.train.groupby("user_id").agg({"movie_id": list})["movie_id"].to_dict()
+        # user_evaluated_movies = dataset.train.groupby("user_id").agg({"movie_id": list})["movie_id"].to_dict()
         for user_id in unique_user_ids:
             user_index = user_id2index[user_id]
             movie_indexes = np.argsort(-pred_matrix[user_index, :])
             for movie_index in movie_indexes:
                 movie_id = unique_movie_ids[movie_index]
-                if movie_id not in user_evaluated_movies[user_id]:
-                    pred_user2items[user_id].append(movie_id)
-                if len(pred_user2items[user_id]) == 10:
+                pred_user2items[user_id].append(movie_id)
+                # if movie_id not in user_evaluated_movies[user_id]:
+                #     pred_user2items[user_id].append(movie_id)
+                if len(pred_user2items[user_id]) == topk:
                     break
         return RecommendResult(movie_rating_predict.rating_pred, pred_user2items)
 

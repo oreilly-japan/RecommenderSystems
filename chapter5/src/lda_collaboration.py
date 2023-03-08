@@ -10,7 +10,7 @@ np.random.seed(0)
 
 
 class LDACollaborationRecommender(BaseRecommender):
-    def recommend(self, dataset: Dataset, **kwargs) -> RecommendResult:
+    def recommend(self, dataset: Dataset, topk,**kwargs) -> RecommendResult:
         # 因子数
         factors = kwargs.get("factors", 50)
         # エポック数
@@ -30,20 +30,21 @@ class LDACollaborationRecommender(BaseRecommender):
         )
         lda_topics = lda_model[common_corpus]
 
-        user_evaluated_movies = dataset.train.groupby("user_id").agg({"movie_id": list})["movie_id"].to_dict()
+        # user_evaluated_movies = dataset.train.groupby("user_id").agg({"movie_id": list})["movie_id"].to_dict()
 
         pred_user2items = defaultdict(list)
         for i, (user_id, data) in enumerate(movielens_train_high_rating.groupby("user_id")):
-            evaluated_movie_ids = user_evaluated_movies[user_id]
+            # evaluated_movie_ids = user_evaluated_movies[user_id]
 
             user_topic = sorted(lda_topics[i], key=lambda x: -x[1])[0][0]
             topic_movies = lda_model.get_topic_terms(user_topic, topn=len(dataset.item_content))
 
             for token_id, score in topic_movies:
                 movie_id = int(common_dictionary.id2token[token_id])
-                if movie_id not in evaluated_movie_ids:
-                    pred_user2items[user_id].append(movie_id)
-                if len(pred_user2items[user_id]) == 10:
+                pred_user2items[user_id].append(movie_id)
+                # if movie_id not in evaluated_movie_ids:
+                #     pred_user2items[user_id].append(movie_id)
+                if len(pred_user2items[user_id]) == topk:
                     break
 
         # LDAでは評価値の予測は難しいため、rmseの評価は行わない。（便宜上、テストデータの予測値をそのまま返す）
