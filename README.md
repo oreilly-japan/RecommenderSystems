@@ -1,4 +1,4 @@
-# 추천 시스템 입문 ~Recommender Systems~
+# 추천 시스템 입문
 
 ---
 
