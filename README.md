@@ -2,7 +2,7 @@
 
 ---
 
-<img src="./cover.jpg" width="70%">
+<img src="./cover.jpg" width="50%">
 
 ---
 
