@@ -30,4 +30,4 @@
 
 정보표는 아래 URL에서 제공됩니다.
 
-![https://www.hanbit.co.kr/store/books/look.php?p_code=B7471666713](https://www.hanbit.co.kr/store/books/look.php?p_code=B7471666713)
+[https://www.hanbit.co.kr/store/books/look.php?p_code=B7471666713](https://www.hanbit.co.kr/store/books/look.php?p_code=B7471666713)
