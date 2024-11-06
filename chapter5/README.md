@@ -36,6 +36,30 @@ chapter5
 
 `chapter5/colab` 폴더에 들어있습니다. github에서 notebook을 열면 Colab 링크가 표시됩니다. 해당 링크를 클릭하면 colab 상에서 실행할 수 있습니다.(Colab이 아닌 로컬 PC에서도 실행할 수 있습니다. 이 때는 로컬 PC에 환경을 구축해야 합니다.) 먼저 `Association.ipynb`, `Item2vec.ipynb` 등을 보면 추천 알고리즘에 관한 이미지를 잡기 쉬울 것입니다.
 
+## 5장 샘플 파일 설명(장/절 순)
+
+5장의 `colab`, `notebook` 디렉터리 안의 노트북(`.ipynb`) 파일은 다음과 같이 구성되어 있습니다.
+
+|파일명|분석/알고리즘|관련 장/절|관련 페이지|
+|:--|:--|:--|:--|
+|`data_download.ipynb`|MovieLens 데이터셋 다운로드|5.2|p.103|
+|`Random.ipynb`|무작위 추천<sup>Random Recommendation</sup>|5.3|p.118|
+|`Popularity.ipynb`|인기도순 추천|5.4|p.120|
+|`Association.ipynb`|연관 규칙(어소시에이션 분석) - Apriori 알고리즘|5.5|p.127|
+|`UMCF.ipynb`|사용자-사용자 메모리 기반 방법 협조 필터링<sup>User-User Memory Based Collaborative Filtering, UMCF</sup>|5.6|p.131|
+|`RF.ipynb`|회귀 모델, 랜덤 포레스트<sup>Random Forest, RF</sup>|5.7|p.137|
+|`SVD.ipynb`|특잇값 분해<sup>Singular Value Decomposition, SVD</sup>|5.8.2|p.144|
+|`NMF.ipynb`|비음수 행렬 분해<sup>Non-negative Matrix Factorization, NMF</sup>|5.8.3|p.148|
+|`MF.ipynb`|행렬 분해<sup>Matrix Factorization, MF</sup>|5.8.4|p.150|
+|`IMF.ipynb`|암묵적 행렬 분해<sup>Implicit Matrix Factorization, IMF</sup>|5.8.5|p.154|
+|`BPR.ipynb`|개인화 된 랭킹 문제<sup>Bayesian Personalized Ranking, BPR</sup>|5.8.6|p.158|
+|`FM.ipynb`|Factorization Machines, FM|5.8.7|p.160|
+|`LDA_content.ipynb`|잠재 디리클레 할당<sup>Latent Dirichlet Allocation, LDA</sup>|5.9.1|p.165|
+|`LDA_collaboration.ipynb`|LDA를 행동 데이터에 적용|5.9.3|p.169|
+|`Word2vec.ipynb`|`word2vec`|5.9.5|p.172|
+|`Item2vec.ipynb`|`word2vec`을 사용한 협조 필터링 추천(`item2vec`)|5.9.6|p.176|
+
+
 ## 로컬 PC에서 환경 구축하기
 
 ### 데이터 다운로드
