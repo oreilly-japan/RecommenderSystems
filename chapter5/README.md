@@ -50,7 +50,7 @@ $ unzip -n chapter5/data/ml-10m.zip -d chapter5/data
 
 ### Poetry를 사용해서 환경 구축하기
 
-python 버전은 python3.7.8을 사용합니다. python3.7.8 설치에는 [pyenv](https://github.com/pyenv/pyenv) 등의 버전 관리 도구를 사용하십시오. 또한, 여기에서는 [poetry](https://python-poetry.org/)를 패키지 관리 도구로 사용하므로 설치하기 바랍니다. 참골, MacOS Monterey에 `pyenv`와 `poetry`를 설치하는 순서를 설명합니다. Windows나 Linux의 경우에는 여러분이 사용하는 OS에 해다아는 명령어로 변경하거나, 도커를 사용한 환경 구축하기를 참조하기 바랍니다.
+python 버전은 python3.7.8을 사용합니다. python3.7.8 설치에는 [pyenv](https://github.com/pyenv/pyenv) 등의 버전 관리 도구를 사용하십시오. 또한, 여기에서는 [poetry](https://python-poetry.org/)를 패키지 관리 도구로 사용하므로 설치하기 바랍니다. 참고로 MacOS Monterey에 `pyenv`와 `poetry`를 설치하는 순서를 설명합니다. Windows나 Linux의 경우에는 여러분이 사용하는 OS에 해당하는 명령어로 변경하거나, 도커를 사용한 환경 구축하기를 참조하기 바랍니다.
 
 #### python3.7.8 설치
 
