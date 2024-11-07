@@ -52,7 +52,7 @@ chapter5
 |`NMF.ipynb`|비음수 행렬 분해<sup>Non-negative Matrix Factorization, NMF</sup>|5.8.3|p.148|
 |`MF.ipynb`|행렬 분해<sup>Matrix Factorization, MF</sup>|5.8.4|p.150|
 |`IMF.ipynb`|암묵적 행렬 분해<sup>Implicit Matrix Factorization, IMF</sup>|5.8.5|p.154|
-|`BPR.ipynb`|개인화 된 랭킹 문제<sup>Bayesian Personalized Ranking, BPR</sup>|5.8.6|p.158|
+|`BPR.ipynb`|개인화된 랭킹 문제<sup>Bayesian Personalized Ranking, BPR</sup>|5.8.6|p.158|
 |`FM.ipynb`|Factorization Machines, FM|5.8.7|p.160|
 |`LDA_content.ipynb`|잠재 디리클레 할당<sup>Latent Dirichlet Allocation, LDA</sup>|5.9.1|p.165|
 |`LDA_collaboration.ipynb`|LDA를 행동 데이터에 적용|5.9.3|p.169|
