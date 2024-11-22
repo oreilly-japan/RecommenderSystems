@@ -49,7 +49,7 @@ class MetricCalculator:
         self, true_user2items: Dict[int, List[int]], pred_user2items: Dict[int, List[int]], k: int
     ) -> float:
         scores = []
-        # テストデータに存在する各ユーザーのprecision@kを計算
+        # 테스트 데이터에 존재하는 각 사용자의 precision@k를 계산한다
         for user_id in true_user2items.keys():
             p_at_k = self._precision_at_k(true_user2items[user_id], pred_user2items[user_id], k)
             scores.append(p_at_k)

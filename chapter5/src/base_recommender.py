@@ -10,11 +10,11 @@ class BaseRecommender(ABC):
         pass
 
     def run_sample(self) -> None:
-        # Movielensのデータを取得
+        # Movielens 데이터 취득
         movielens = DataLoader(num_users=1000, num_test_items=5, data_path="../data/ml-10M100K/").load()
-        # 推薦計算
+        # 추천 계산
         recommend_result = self.recommend(movielens)
-        # 推薦結果の評価
+        # 추천 결과 평가
         metrics = MetricCalculator().calc(
             movielens.test.rating.tolist(),
             recommend_result.rating.tolist(),

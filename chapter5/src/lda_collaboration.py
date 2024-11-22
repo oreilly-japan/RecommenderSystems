@@ -11,9 +11,9 @@ np.random.seed(0)
 
 class LDACollaborationRecommender(BaseRecommender):
     def recommend(self, dataset: Dataset, **kwargs) -> RecommendResult:
-        # 因子数
+        # 인자 수
         factors = kwargs.get("factors", 50)
-        # エポック数
+        # 에폭 수
         n_epochs = kwargs.get("n_epochs", 30)
 
         logging.basicConfig(format="%(asctime)s : %(levelname)s : %(message)s", level=logging.INFO)
@@ -46,7 +46,7 @@ class LDACollaborationRecommender(BaseRecommender):
                 if len(pred_user2items[user_id]) == 10:
                     break
 
-        # LDAでは評価値の予測は難しいため、rmseの評価は行わない。（便宜上、テストデータの予測値をそのまま返す）
+        # LDA에서는 평갓값 예측이 어려우므로 rmse 평가는 수행하지 않는다(편의상, 테스트 데이터를 그대로 반환한다).
         return RecommendResult(dataset.test.rating, pred_user2items)
 
 

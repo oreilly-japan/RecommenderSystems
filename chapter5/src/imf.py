@@ -10,11 +10,11 @@ np.random.seed(0)
 
 class IMFRecommender(BaseRecommender):
     def recommend(self, dataset: Dataset, **kwargs) -> RecommendResult:
-        # 因子数
+        # 인자 수
         factors = kwargs.get("factors", 10)
-        # 評価数の閾値
+        # 평갓값의 임곗값
         minimum_num_rating = kwargs.get("minimum_num_rating", 0)
-        # エポック数
+        # 에폭 수
         n_epochs = kwargs.get("n_epochs", 50)
         # alpha
         alpha = kwargs.get("alpha", 1.0)
@@ -23,7 +23,7 @@ class IMFRecommender(BaseRecommender):
             lambda x: len(x["movie_id"]) >= minimum_num_rating
         )
 
-        # 行列分解用に行列を作成する
+        # 행렬 분석용으로 행렬을 작성한다
         movielens_train_high_rating = filtered_movielens_train[dataset.train.rating >= 4]
 
         unique_user_ids = sorted(movielens_train_high_rating.user_id.unique())
@@ -37,15 +37,15 @@ class IMFRecommender(BaseRecommender):
             movie_index = movie_id2index[row["movie_id"]]
             movielens_matrix[movie_index, user_index] = 1.0 * alpha
 
-        # モデルの初期化
+        # 모델 초기화
         model = implicit.als.AlternatingLeastSquares(
             factors=factors, iterations=n_epochs, calculate_training_loss=True, random_state=1
         )
 
-        # 学習
+        # 학습
         model.fit(movielens_matrix)
 
-        # 推薦
+        # 추천
         recommendations = model.recommend_all(movielens_matrix.T)
         pred_user2items = defaultdict(list)
         for user_id, user_index in user_id2index.items():
@@ -53,7 +53,7 @@ class IMFRecommender(BaseRecommender):
             for movie_index in movie_indexes:
                 movie_id = unique_movie_ids[movie_index]
                 pred_user2items[user_id].append(movie_id)
-        # IMFでは評価値の予測は難しいため、rmseの評価は行わない。（便宜上、テストデータの予測値をそのまま返す）
+        # IMF에서는 평갓값의 예측이 어려우므로 rmse 평가는 수행하지 않는다(편의상, 테스트 데이터를 그대로 반환한다).
         return RecommendResult(dataset.test.rating, pred_user2items)
 
 
