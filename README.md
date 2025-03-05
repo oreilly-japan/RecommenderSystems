@@ -28,4 +28,4 @@
 
 ## 正誤表
 
-まだありません。誤植など間違いを見つけた方は、japan@oreilly.co.jpまでお知らせください。
+[公式サイト](https://www.oreilly.co.jp/books/9784873119663/)に掲載されています。誤植など間違いを見つけた方は、japan@oreilly.co.jpまでお知らせください。
