@@ -1,0 +1,14 @@
+numpy ~= 1.19.5
+pandas ~= 1.2.0
+sklearn ~= 0.0
+tqdm ~= 4.55.2
+jupyterlab ~= 3.0.3
+jedi == 0.17.2
+matplotlib ~= 3.4.1
+scikit-surprise ~= 1.1.1
+gensim ~= 4.0.1
+implicit ~= 0.4.4
+wheel ~= 0.36.2
+ipywidgets ~= 7.6.3
+mlxtend ~= 0.18.0
+xlearn ~= 0.40a1
