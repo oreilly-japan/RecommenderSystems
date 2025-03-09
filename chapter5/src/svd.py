@@ -49,7 +49,7 @@ class SVDRecommender(BaseRecommender):
         for user_id in dataset.train.user_id.unique():
             if user_id not in user_id2index:
                 continue
-            user_index = user_id2index[row["user_id"]]
+            user_index = user_id2index[user_id]
             movie_indexes = np.argsort(-pred_matrix[user_index, :])
             for movie_index in movie_indexes:
                 movie_id = user_movie_matrix.columns[movie_index]
